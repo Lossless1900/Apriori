@@ -98,8 +98,8 @@ def main(min_sup, min_conf, max_conf, csv_file):
     for c in C2:
         for l in c:
             print l,
-            print " Support:"
-            print sup_dict(l)
+            print " Support:",
+            print sup_dict[frozenset(l)]
             
     R2 = generateOneRHSRules2(C2,sup_dict,min_conf,max_conf);
     R2 = sorted(R2.items(),key=operator.itemgetter(1))
@@ -112,14 +112,16 @@ if __name__ == '__main__':
     min_sup = 0.0
     min_conf = 0.0
     max_conf = 1.0
-    if len(sys.argv) == 3:
-        min_sup = float(sys.argv[1])
-        min_conf = float(sys.argv[2])
-    elif len(sys.argv) == 4:
-        min_sup = float(sys.argv[1])
-        min_conf = float(sys.argv[2])
-        max_conf = float(sys.argv[3])
+    if len(sys.argv) == 4:
+        csv_file = sys.argv[1]
+        min_sup = float(sys.argv[2])
+        min_conf = float(sys.argv[3])
+    elif len(sys.argv) == 5:
+        csv_file = sys.argv[1]
+        min_sup = float(sys.argv[2])
+        min_conf = float(sys.argv[3])
+        max_conf = float(sys.argv[4])
     else:
-        print "apriori min_sup min_conf [max_conf]"
+        print "python apriori.py csv_file min_sup min_conf [max_conf]"
         sys.exit(1)
-    main(min_sup, min_conf, max_conf)
+    main(min_sup, min_conf, max_conf, csv_file)
