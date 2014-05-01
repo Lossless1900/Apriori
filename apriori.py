@@ -91,13 +91,10 @@ def generateOneRHSRules2(C,sup_dict,min_conf,max_conf):
                     R[key] = conf
     return R
     
-def main():
-    transactions = readCsv('restaurant.csv')
-    min_sup = math.ceil(0.05*len(transactions))
-    min_conf = 0.5
-    max_conf = 0.9
-    
-    C2,sup_dict = generateSupportSets2(transactions,min_sup)
+def main(min_sup, min_conf, max_conf, csv_file):
+    transactions = readCsv(csv_file)
+    min_sup_count = math.ceil(min_sup*len(transactions))
+    C2,sup_dict = generateSupportSets2(transactions,min_sup_count)
     for c in C2:
         for l in c:
             print l,
