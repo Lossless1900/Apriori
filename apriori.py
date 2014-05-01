@@ -97,7 +97,7 @@ def main(min_sup, min_conf, max_conf):
 #             print marshal.loads(l)
 #     print sorted(R.items(),key=operator.itemgetter(0))
     
-    sys.stdout.write("Support: %d\n" % min_sup_count)
+#    sys.stdout.write("Support: %d\n" % min_sup_count)
     C2,sup_dict = generateSupportSets2(transactions,min_sup_count)
 #     for c in C2:
 #         for l in c:
