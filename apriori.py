@@ -84,11 +84,11 @@ def generateOneRHSRules2(C,sup_dict,min_conf,max_conf):
                     R[key] = conf
     return R
     
-def main():
-    transactions = readCsv('311.csv')
-    min_sup = math.ceil(0.01*len(transactions))
-    min_conf = 0.6
-    max_conf = 0.9
+def main(min_sup, min_conf, max_conf):
+    transactions = readCsv('/Users/xingyuwang/Desktop/311mod.csv')
+    min_sup_count = math.ceil(min_sup*len(transactions))
+    #min_conf = 0.6
+    #max_conf = 0.9
 #     sys.stdout.write("Support: %d\n" % min_sup)
 #     C = generateSupportSets(transactions,min_sup)
 #     R = generateOneRHSRules(C,min_conf)
@@ -97,11 +97,11 @@ def main():
 #             print marshal.loads(l)
 #     print sorted(R.items(),key=operator.itemgetter(0))
     
-    sys.stdout.write("Support: %d\n" % min_sup)
-    C2,sup_dict = generateSupportSets2(transactions,min_sup)
-    for c in C2:
-        for l in c:
-            print l
+    sys.stdout.write("Support: %d\n" % min_sup_count)
+    C2,sup_dict = generateSupportSets2(transactions,min_sup_count)
+#     for c in C2:
+#         for l in c:
+#             print l
     R2 = generateOneRHSRules2(C2,sup_dict,min_conf,max_conf);
     R2 = sorted(R2.items(),key=operator.itemgetter(1))
     for key,value in R2:
@@ -110,4 +110,17 @@ def main():
         print value
     
 if __name__ == '__main__':
-    main()
+    min_sup = 0.0
+    min_conf = 0.0
+    max_conf = 1.0
+    if len(sys.argv) == 3:
+        min_sup = float(sys.argv[1])
+        min_conf = float(sys.argv[2])
+    elif len(sys.argv) == 4:
+        min_sup = float(sys.argv[1])
+        min_conf = float(sys.argv[2])
+        max_conf = float(sys.argv[3])
+    else:
+        print "Please enter arguments in correct pattern!"
+        sys.exit(1)
+    main(min_sup, min_conf, max_conf)
