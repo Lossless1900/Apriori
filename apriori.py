@@ -1,7 +1,6 @@
 import csv
 import sys
 import math
-import marshal
 import operator
 
 def readCsv(csv_file):
@@ -58,8 +57,16 @@ def generateSupportSets2(transactions,min_sup):
         
 #         print sup_dict
         # Prune the C_k by min_sup
-        C[k][:] = [s for s in C[k] if (sup_dict[frozenset(s)]>=min_sup)]
-                      
+        count = 0
+        for s in C[k]:
+            if (sup_dict[frozenset(s)]<min_sup):
+                sup_dict.pop(frozenset(s))
+            else:
+                C[k][count] = s
+                count += 1
+        C[k] = C[k][0:count] 
+        #C[k][:] = [s for s in C[k] if (sup_dict[frozenset(s)]>=min_sup)]
+
         if(len(C[k])==0):
             C.pop()
              
@@ -85,23 +92,17 @@ def generateOneRHSRules2(C,sup_dict,min_conf,max_conf):
     return R
     
 def main():
-    transactions = readCsv('311.csv')
-    min_sup = math.ceil(0.01*len(transactions))
-    min_conf = 0.6
+    transactions = readCsv('restaurant.csv')
+    min_sup = math.ceil(0.05*len(transactions))
+    min_conf = 0.5
     max_conf = 0.9
-#     sys.stdout.write("Support: %d\n" % min_sup)
-#     C = generateSupportSets(transactions,min_sup)
-#     R = generateOneRHSRules(C,min_conf)
-#     for c in C:
-#         for l in c:
-#             print marshal.loads(l)
-#     print sorted(R.items(),key=operator.itemgetter(0))
     
-    sys.stdout.write("Support: %d\n" % min_sup)
     C2,sup_dict = generateSupportSets2(transactions,min_sup)
     for c in C2:
         for l in c:
-            print l
+            print l,
+            print " Support:"
+            print sup_dict(l)
     R2 = generateOneRHSRules2(C2,sup_dict,min_conf,max_conf);
     R2 = sorted(R2.items(),key=operator.itemgetter(1))
     for key,value in R2:
