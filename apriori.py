@@ -103,6 +103,7 @@ def main():
             print l,
             print " Support:"
             print sup_dict(l)
+            
     R2 = generateOneRHSRules2(C2,sup_dict,min_conf,max_conf);
     R2 = sorted(R2.items(),key=operator.itemgetter(1))
     for key,value in R2:
@@ -111,4 +112,17 @@ def main():
         print value
     
 if __name__ == '__main__':
-    main()
+    min_sup = 0.0
+    min_conf = 0.0
+    max_conf = 1.0
+    if len(sys.argv) == 3:
+        min_sup = float(sys.argv[1])
+        min_conf = float(sys.argv[2])
+    elif len(sys.argv) == 4:
+        min_sup = float(sys.argv[1])
+        min_conf = float(sys.argv[2])
+        max_conf = float(sys.argv[3])
+    else:
+        print "apriori min_sup min_conf [max_conf]"
+        sys.exit(1)
+    main(min_sup, min_conf, max_conf)
