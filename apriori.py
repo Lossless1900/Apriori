@@ -84,8 +84,8 @@ def generateOneRHSRules2(C,sup_dict,min_conf,max_conf):
                     R[key] = conf
     return R
     
-def main(min_sup, min_conf, max_conf):
-    transactions = readCsv('/Users/xingyuwang/Desktop/311mod.csv')
+def main(min_sup, min_conf, max_conf, csv_file):
+    transactions = readCsv(csv_file)
     min_sup_count = math.ceil(min_sup*len(transactions))
     #min_conf = 0.6
     #max_conf = 0.9
@@ -121,6 +121,6 @@ if __name__ == '__main__':
         min_conf = float(sys.argv[2])
         max_conf = float(sys.argv[3])
     else:
-        print "Please enter arguments in correct pattern!"
+        print "apriori min_sup min_conf [max_conf]"
         sys.exit(1)
     main(min_sup, min_conf, max_conf)
