@@ -48,22 +48,23 @@ e.g: python apriori.py INTEGRATED-DATASET 0.05 0.7 1
 Interesting Rules:
 ==================
 We set the minimum support rate to 0.05 and the minimum confidence rate 0.7. Some of the interesting rules are listed below.
-1. ['ACTIONCODE=D'] => ['GRADE=A']   0.960632427844
-['GRADE=A'] => ['ACTIONCODE=D']   0.918464660129
+1.[ACTIONCODE=D] => [GRADE=A] (Conf: 96.1106803249%, Supp: 37%)
+[GRADE=A] => [ACTIONCODE=D] (Conf: 91.7020365251%, Supp: 37%)
 This rule indicates that if a restaurant is required to take action D after the violation, it is still likely to get the grade A in the inspection. From the description we can know that the actioncode D denotes 'Violations were cited in the following area(s)', which seems not so severe.
 
-2.['VIOCODE=08A', 'ACTIONCODE=D'] => ['GRADE=A']   0.987778049377349 
-['VIOCODE=06D', 'ACTIONCODE=D'] => ['GRADE=A']   0.995268463279
-These two rules are between the violation code and grade of one inspection. The violation code 08A denotes 'Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist'. The violation code 06D denotes 'Personal cleanliness inadequate. Outer garment soiled with possible contaminant.  Effective hair restraint not worn in an area where food is prepared'. It seems that these two rule are usually violated by the restaurant and are not that critical.
+2.[VIOCODE=02G,ACTIONCODE=D] => [GRADE=A] (Conf: 99.8678646934%, Supp: 5%)
+[VIOCODE=06D,ACTIONCODE=D] => [GRADE=A] (Conf: 99.5673076923%, Supp: 6%)
+[VIOCODE=08A,ACTIONCODE=D] => [GRADE=A] (Conf: 98.7688864018%, Supp: 5%)
+These rules are between the violation code and grade of one inspection. The violation code 08A denotes 'Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist'. The violation code 06D denotes 'Personal cleanliness inadequate. Outer garment soiled with possible contaminant.  Effective hair restraint not worn in an area where food is prepared'. It seems that these rules are usually violated by the restaurant and are not that critical.
 
-3.['GRADE=B'] => ['ACTIONCODE=U']  0.936857142857
+3.[GRADE=B] => [ACTIONCODE=U] (Conf: 93.4927606963%, Supp: 9%)
 This rule indicates that for a restaurant whose grade is B, it is likely to be required to take action 'U'. However, the description of actioncode 'U' and 'D' is actually the same. We can get the sense that even the description is the same, the action 'U' seems more severe than the action 'D'.
 
-4.['PARK_SPACE=Very High'] => ['RESTAURANT_VOLUME=Very High']  0.883788164177
+4.[PARK_SPACE=Very High] => [RESTAURANT_VOLUME=Very High] (Conf: 88.3672039243%, Supp: 31%)
 This rule shows that if the parking slots in a region is really large, it is likely that there are many restaurants in this region. This rule is expected and reasonable.
 
-5.['VIOCODE=10F', 'VIOCODE=04L'] => ['VIOCODE=08A']   0.842159277504
-['VIOCODE=08A'] => frozenset(['VIOCODE=04L'])   0.657733787759
+5.[VIOCODE=10F,VIOCODE=04L] => [VIOCODE=08A] (Conf: 84.2354053415%, Supp: 5%)
+[VIOCODE=04L] => [VIOCODE=08A] (Conf: 79.8218612876%, Supp: 19%)
 This rule indicates the correalation between several violations. The violation code 10F denotes Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit. 04L denotes Evidence of mice or live mice present in facility's food and/or non-food areas." It is obvious that these three violations are highly related and tend to appear at the same time.
 
 6. If we decrease the support rate, more rules regarding with the cuisine code and grade will be generated. While at the same time, some trivial rules with confidence 100% will also be generated.
