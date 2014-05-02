@@ -13,7 +13,6 @@ Submitted Files
 ./proj3/apriori.py
 ./proj3/ddl_parking.sql
 ./proj3/example-run.txt
-./proj3/export_parking.sql
 ./proj3/export.sql
 ./proj3/README.md
 
@@ -34,7 +33,7 @@ The operations illustrated above involves loading data into Mysql database and o
 Reason of choosing the dataset
 ==============================
 Recently one of the restaurant near the school was closed. We explore the relation between the violations and restaurant inspection grade to see if there is any correaltion between violation rules or geological locations and how the restaurant will react to these violations. In addition, one related information about the restaurant is the parking spaces nearby. We want to verify that if one region has many parking lots, it tends to have lots of restaurants.
-To reconstruct the dataset, Mysql is needed to run  ddl_inspection.sql, ddl_parking.sql and export.sql. Before running ddl_parking.sql, csv file should be prepocessed and remove address column. Each record should occupy one line. Before running the ddl_inspection.sql, four csvs need to be downloaded from Restaurant Inspection Results dataset.
+To reconstruct the dataset, Mysql is needed to run  ddl_inspection.sql, ddl_parking.sql and export.sql. Before running ddl_parking.sql, csv file should be prepocessed and remove address and entity name column. Each record should occupy one line. Before running the ddl_inspection.sql, four csvs need to be downloaded from Restaurant Inspection Results dataset.
 
 ==============
 Run Directions
