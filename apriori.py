@@ -129,7 +129,12 @@ def generateSupportSets(transactions,min_sup,min_conf,max_conf):
                     sup_dict[frozenset(s)]+=1
         
         # Prune the C_k by min_sup
-        C_cur = set(s for s in C_cur if (sup_dict[frozenset(s)]>=min_sup))              
+        C_cur = set(s for s in C_cur if (sup_dict[frozenset(s)]>=min_sup))
+
+        new_sup_dict = {}
+        for key in sup_dict:
+            if sup_dict[key]>=min_sup:
+                new_sup_dict[key] = sup_dict[key]
         
         # Generate rules
         for prev_set in C_prev:
@@ -137,26 +142,42 @@ def generateSupportSets(transactions,min_sup,min_conf,max_conf):
                 if prev_set.issubset(cur_set):
                     conf = 1.0*sup_dict[cur_set]/sup_dict[prev_set]
                     if (conf>=min_conf and conf<=max_conf):
-                        key = str(prev_set)+" => "+str(cur_set.difference(prev_set))
+                        output_left = '['
+                        for i in prev_set:
+                            output_left += (i + ',')
+                        output_left = output_left[0:len(output_left)-1]
+                        output_left += ']'
+                        
+                        output_right = '['
+                        for i in cur_set.difference(prev_set):
+                            output_right += i
+                        output_right += ']'
+                        key = output_left+" => "+output_right
+                        key += ' (Conf: ' + str(conf*100) + '%, Supp: ' + str(int(float(sup_dict[cur_set])/len(transactions)*100))+'%)'
                         R[key] = conf
         k+=1
                   
-    return C,sup_dict,R
+    return C,new_sup_dict,R
 
 def main(min_sup, min_conf, max_conf, csv_file):
     transactions = readCsv(csv_file)
     min_sup_count = math.ceil(min_sup*len(transactions))
     C,sup_dict,R = generateSupportSets(transactions,min_sup_count,min_conf,max_conf)
-    R = sorted(R.iteritems(),key=operator.itemgetter(1))
-    for c in C:
-        for l in c:
-            print l,
-            print " Support:",
-            print sup_dict[frozenset(l)]
-    for key,value in R:
-        print key,
-        print ' ',
-        print value
+    R = sorted(R.iteritems(),key=operator.itemgetter(1),reverse=True)
+    sup_dict_list = sorted(sup_dict.iteritems(),key=operator.itemgetter(1),reverse=True)
+    print "==Frequent itemsets (min_sup=" + str(int(min_sup*100)) + "%)" 
+    for t in sup_dict_list:
+        output = '['
+        for i in t[0]:
+            output += (i + ',')
+        output = output[0:len(output)-1]
+        output += '], ' + str(int(float(t[1])/len(transactions)*100)) + '%'
+        print output
+        
+    print ''
+    print "==High-confidence association rules (min_conf=" + str(int(min_conf*100)) + "%)"
+    for t in R: 
+        print t[0]
     
 #     C2,sup_dict = generateSupportSets2(transactions,min_sup_count)
 #     for c in C2:
