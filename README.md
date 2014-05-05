@@ -24,8 +24,8 @@ We use two datasets to get an integrated dataset. One dataset is the Restaurant 
 ===========================
 High Level Data Preprocess:
 ===========================
-For the Restaurant Inspection Results dataset, each violation of a restaurant will result in a row. Key fields include the cuisine code, inspection date, violation code, current grade, zipcode and action code. One inspection may have multiple corresponding rows. To handle this problem, we group the dataset by inspection date and concatenate the violation code at one inspection. In addition, we remove the address and restaurant name in the dataset because these two fields are not likely to reach the minimun support rate. We only consider the inspection data over 2013 due to the data volume. Around 75000 records will be generated in the first dataset. Note that some of the features have very long descriptions and we use its code instead in mining association rules.
-For the Parking Facilities, one record is corresponded to one parklot, including its License Number, Entity Name, Trade Name, Address Zip Code, Telephone Number and	Number of Spaces. We only sconsider the total number of spaces within a region which has the same zipcode.
+For the Restaurant Inspection Results dataset, each violation of a restaurant will result in a row. Key fields include the cuisine code, inspection date, violation code, borough of restaurant, current grade, zipcode and action code. One inspection may have multiple corresponding rows. To handle this problem, we group the dataset by inspection date and concatenate the violation code at one inspection. In addition, we remove the address, restaurant id, building name in the dataset because these fields are not likely to reach the minimun support rate. We only keep inspdate as the date since several date fields are related. We only consider the inspection data over 2013 due to the data volume. Around 75000 records will be generated in the first dataset. Note that some of the features have very long descriptions and we use its code instead in mining association rules.
+For the Parking Facilities, one record is corresponded to one parklot, including its License Number, Entity Name, Trade Name, Address Zip Code, Telephone Number and Number of Spaces. We only sconsider the total number of spaces within a region which has the same zipcode.
 To join the dataset, we use the zipcode of restaurant and parklot as the join filed. Since the total number of spaces are integers, if we use these numbers as items, it is unlikely to get interesting rules. So we classify them into five categories according to the percentile statistics, accordingly PARK_SPACE='Very High','High','Medium','Low' and 'Very Low'. The same trick is used to classify the total number of restaurants and average inspection score (the lower the better) within the same region.
 The operations illustrated above involves loading data into Mysql database and outputing csv file as the input of association rules. Related import and export scripts are also submitted.
 
@@ -34,6 +34,12 @@ Reason of choosing the dataset
 ==============================
 Recently one of the restaurant near the school was closed. We explore the relation between the violations and restaurant inspection grade to see if there is any correaltion between violation rules or geological locations and how the restaurant will react to these violations. In addition, one related information about the restaurant is the parking spaces nearby. We want to verify that if one region has many parking lots, it tends to have lots of restaurants.
 To reconstruct the dataset, Mysql is needed to run  ddl_inspection.sql, ddl_parking.sql and export.sql. Before running ddl_parking.sql, csv file should be prepocessed and remove address and entity name column. Each record should occupy one line. Before running the ddl_inspection.sql, four csvs need to be downloaded from Restaurant Inspection Results dataset.
+
+==============
+Algorithm
+==============
+
+We implemented the basic A-priori algorithm using python. Frozen set data structure is used to store the items and we use it to expand the itemset with minimum support. After getting an item set, we compute the rules with only one item in RHS.
 
 ==============
 Run Directions
